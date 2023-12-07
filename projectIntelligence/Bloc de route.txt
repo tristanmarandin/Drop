@@ -1,0 +1,53 @@
+1. Generation Page
+
+- renvoie l'image possédant l'id renseigné.
+get : 'http://localhost:4000/api/images/${id}'
+
+- modifie le statut de visibilité d'une image selon son id.
+update : 'http://localhost:4000/api/images/${imageId}/visible'
+
+- envoie l'instruction et les paramètres de génération au middleend à destination de l'API SD. Le middleend crée ainsi un objet image qu'il renvoie au frontend pour être affiché et qu'il sauvegarde en base de données.
+post : 'http://localhost:4000/api/image/generate'
+body: JSON.stringify({
+          instruction,
+          selectedButtons,
+          buttonLabelsByTab,
+          imageWidth: Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).width),
+          imageHeight: Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).height),
+          seed: seedValue,
+          generationSteps: Number.isNaN(generationSteps) ? 20 : generationSteps,
+          guidanceScale: Number.isNaN(guidanceScaleValue) ? 7.5 : guidanceScaleValue,
+        })
+
+
+2. UserPage
+
+- récupère le nom et la PdP du user selon son Id.
+get : 'http://localhost:4000/api/user/${id}'
+
+- récupère le nombre de collection et le nombre d'images d'un user selon son Id.
+get : 'http://localhost:4000/api/userActivity/${id}'
+
+- collecte les collections propres à un user.
+get : 'http://localhost:4000/api/collections/${user}'
+
+- collecte les images propres à un user.
+get : 'http://localhost:4000/api/images/${user}'
+
+3. CommunityPage
+
+- afficher les images dont la publication a été autorisée par le créateur (visible == true).
+get : 'http://localhost:4000/api/images/${imageId}/visible'
+
+- récupère les images dont la publication a été autorisée par le créateur (visible == true) ET dont le prompt correspond à la recherche entrée par l'utilisateur. A noter qu'un principe de Fuzzy research devra être implémenté. Le backend renvoie les images en question.
+post : 'http://localhost:4000/api/images?visible=true'
+
+4. Connection
+
+- envoie les credentials et reçoit l'User connecté
+post : 'http://localhost:4000/api/user/connection'
+
+5. UserInformation
+
+- envoie les modifications apportées au profil utilisateur et reçoit le nouveau User mis à jour
+post : 'http://localhost:4000/api/user/modifyUser'

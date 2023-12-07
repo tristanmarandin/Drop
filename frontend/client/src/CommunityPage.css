@@ -1,0 +1,86 @@
+/* CSS for Research Area */
+.research-area {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  height: 40px;
+  margin: 0 auto;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 50px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-top: 100px;
+  margin-bottom: 40px;
+}
+
+.research-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px; /* Ensure the icon container has the same height as the area */
+  background-color: #f0f0f000; /* Add a background color for better visibility */
+  border-radius: 50px; /* Make the icon container round */
+}
+
+.research-icon svg {
+  /* Make the icon fit inside the container */
+  width: 24px;
+  height: 24px;
+  fill: #000000; /* Set the color of the icon */
+}
+
+.research-input {
+  flex: 1;
+  margin-left: 10px;
+  border: none;
+  outline: none;
+  color: #000;
+}
+
+.send-research-button {
+  width: 10%;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.arrow.right {
+  border: solid black;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 3px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+}
+
+
+.gallery-container {
+  width: 99%;
+  margin: 0 auto;
+}
+
+.masonry-gallery {
+  column-count: 5; /* Number of columns */
+  column-gap: 5px; /* Gap between columns */
+}
+
+.communityGalleryImages {
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 5px; /* Gap between rows */
+  break-inside: avoid; /* Prevents breaking inside a gallery item */
+}
+
+.communityGalleryImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}

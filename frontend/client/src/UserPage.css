@@ -1,0 +1,90 @@
+
+
+.user-page {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: white; /* Setting the background to white */
+    color: #333; /* Default text color for better contrast */
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-pic {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    border: 3px solid #333; /* Dark border for contrast */
+    object-fit: cover;
+}
+
+.username {
+    font-size: 24px;
+    color: #333;
+}
+
+.description {
+    font-size: 16px;
+    color: #555; /* Slightly lighter than the username for hierarchy */
+}
+
+.counts {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.count-item {
+    margin: 0 15px;
+    text-align: center;
+}
+
+.count-number {
+    font-size: 20px;
+    font-weight: bold;
+    display: block;
+    color: #333;
+}
+
+.count-label {
+    font-size: 14px;
+    color: #777; /* Lighter color for the labels */
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    list-style-type: none;
+    padding: 20px 0; /* Similar padding as the menu */
+    margin: 20px auto; /* Center the tabs */
+    width: 50%; /* Set the width to 50% */
+}
+
+.tab-button {
+    color: #000000; /* Black color for the text */
+    text-decoration: none;
+    transition: color 0.3s ease, transform 0.3s ease; /* Transition for color and transform */
+    padding: 8px 20px; /* Padding for each tab */
+    border: none; /* Remove default border */
+    background-color: transparent; /* Transparent background */
+    cursor: pointer;
+    font-size: 1.2em; /* Adjust font size */
+}
+
+.tab-button:hover {
+    color: #8b8b8b; /* Color change on hover */
+    transform: scale(1.1); /* Enlarge the tab on hover */
+}
+
+.tab-button.activeLink {
+    background-color: #e9e9e9; /* Background color for the active tab */
+    border-radius: 6px; /* Rounded corners */
+}
+
+.content {
+    /* Styles for the tab content */
+}
