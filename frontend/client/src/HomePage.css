@@ -68,6 +68,36 @@ body {
     animation: moveToTop 2s forwards; /* Animation to move the logo and title to the top */
   }
 
+  .user-container {
+    position: absolute; /* or fixed, depending on your layout */
+    right: 0;
+    top: 0;
+    padding-right: 20px; /* adjust as needed for your layout */
+    padding-top: 10px; /* adjust as needed for your layout */
+    z-index: 1000; /* ensures it stays on top */
+  }
+  
+  .user-profile-container {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* pushes the profile to the right */
+  }
+  
+  .user-profile-image {
+    width: 40px; /* adjust as needed */
+    height: 40px; /* adjust as needed */
+    border-radius: 50%; /* circular image */
+    margin-right: 10px;
+  }
+  
+  .user-profile-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none; /* Removes underline from NavLink */
+    color: inherit; /* Ensures the text color matches your header */
+    /* Add any additional styling for the link */
+  }
+
   .head-menu-container {
     position: relative; /* Add relative positioning to contain the shadow gradient */
     background-color: #ffffff; /* Set the background color to white */
@@ -77,7 +107,7 @@ body {
 
   .head-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 20px 0; /* Add some padding to the top and bottom */
   }
@@ -85,7 +115,6 @@ body {
   .logo-title-container {
     display: flex;
     align-items: center;
-    justify-content: center;
     margin-top: 30px; /* Added top margin to create space */
   }
   
@@ -100,25 +129,6 @@ body {
   .head-title {
     font-size: 4em; /* Adjust this value to change the title size */
     color: #000000; /* Set the title color to black */
-  }
-
-  .user-profile-container {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-profile-image {
-    width: 40px; /* adjust as needed */
-    height: 40px; /* adjust as needed */
-    border-radius: 50%; /* circular image */
-    margin-right: 10px;
-  }
-
-  .user-profile-link {
-    display: flex;
-    align-items: center;
-    text-decoration: none; /* Optional: Removes underline from NavLink */
-    /* Add any additional styling for the link */
   }
   
   .menu {

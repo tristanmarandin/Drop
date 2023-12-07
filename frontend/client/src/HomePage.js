@@ -394,6 +394,14 @@ const HomePage = () => {
         <img src="Drop.jpg" alt="Logo" />
       </div>
       <div className="homepage-container">
+        <div className="user-container">
+          <NavLink to="/user" className="user-profile-link">
+            <div className="user-profile-container">
+              <img src="https://img.freepik.com/vecteurs-premium/conception-mascotte-poulet-fort-dessin-anime_194935-13.jpg" alt="User Profile" className="user-profile-image" />
+              <div className="user-name">SuperChicken</div>
+            </div>
+          </NavLink>
+        </div>
         <div className="head-menu-container">
           <div className="head-container">
             <div className="logo-title-container">
@@ -402,12 +410,6 @@ const HomePage = () => {
               </div>
               <div className="head-title">DROP</div>
             </div>
-            <NavLink to="/user" className="user-profile-link">
-              <div className="user-profile-container">
-                <img src="Drop.jpg" alt="User Profile" className="user-profile-image" />
-                <div className="user-name">USER NAME</div>
-              </div>
-            </NavLink>
           </div>
           
           <ul className="menu">
