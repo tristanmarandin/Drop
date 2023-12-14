@@ -61,27 +61,6 @@ const HomePage = () => {
   const [generationSteps, setGenerationSteps] = useState('20');
   const [guidanceScale, setGuidanceScale] = useState('7.5');
   const [galleryImages, setGalleryImages] = useState([]);
-
-  // INITIAL ANIMATION
-  useEffect(() => {
-    let isFirstVisit = !localStorage.getItem("visitedBefore");
-
-    if (isFirstVisit) {
-      setTimeout(() => {
-        const fullscreenLogo = document.querySelector(".fullscreen-logo");
-        fullscreenLogo.style.opacity = "0"; // Start the fade out
-
-        fullscreenLogo.addEventListener("transitionend", () => {
-          fullscreenLogo.style.display = "none"; // Hide the logo after fade out
-        });
-      }, 1000); // Wait for 1 second before starting the fade out
-
-      localStorage.setItem("visitedBefore", "true");
-    } else {
-      const fullscreenLogo = document.querySelector(".fullscreen-logo");
-      fullscreenLogo.style.display = "none"; // If not the first visit, hide the logo immediately
-    }
-  }, []);
   
 
   // FUNCTIONS
@@ -150,7 +129,7 @@ const HomePage = () => {
     document.body.removeChild(a);
   };
   
-  const handleTabSelect = (tabName, shouldScroll = false) => {
+  const handleTabSelect = (tabName, shouldScroll) => {
     setActiveTabs(prevState => ({
       ...prevState,
       [tabName]: !prevState[tabName] // Toggle the active state
@@ -161,7 +140,7 @@ const HomePage = () => {
     }
   };
   
-  const openTabSelect = (tabName, shouldScroll = false) => {
+  const openTabSelect = (tabName, shouldScroll) => {
     setActiveTabs(prevState => ({
       ...prevState,
       [tabName]: true // Toggle the active state
@@ -201,7 +180,7 @@ const HomePage = () => {
     });
   };  
 
-  const handleButtonToggle = (buttonName, tabName) => {
+  const handleButtonToggle = (buttonName) => {
     setButtonStates((prevState) => ({
       ...prevState,
       [buttonName]: !prevState[buttonName],
@@ -267,7 +246,7 @@ const HomePage = () => {
 
   const handleSendInstruction = async () => {
     try {
-      let userID = "admin";
+      let userID = "1";
       // Get the instruction from the user input field or textarea
       const instructionTextArea = document.getElementById('instructionInput');
       const instruction = instructionTextArea.value;
@@ -287,7 +266,6 @@ const HomePage = () => {
       const seedValue = seed.trim() || null; // Set seed as null if it's an empty string
       const guidanceScaleValue = Number(guidanceScale);
 
-      console.log(Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).width))
       // Send the instruction to the backend
       const response = await fetch('http://localhost:3000/api/image/generate', {
         method: 'POST',
@@ -298,7 +276,6 @@ const HomePage = () => {
           userID,
           instruction,
           selectedButtons,
-          buttonLabelsByTab,
           imageWidth: Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).width),
           imageHeight: Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).height),
           seed: seedValue,
@@ -307,48 +284,15 @@ const HomePage = () => {
         }),
       })
 
+      console.log(response);
+
       // Clear the instruction input field
       instructionTextArea.value = '';
 
-  } catch (error) {
-    console.error(error);
+    } catch (error) {
+      console.error(error);
+    }
   }
-  }
-
-  useEffect(() => {
-    // Function to update the image source
-    const updateImageSource = () => {
-      fetch('http://localhost:3000/api/refresh_image')
-        .then(response => response.json())
-        .then(data => {
-          const GeneratedImages = data.images;
-  
-          // Update the state for the image data
-          setImageData(GeneratedImages.map((image, index) => ({
-            id: 'image' + (index + 1),
-            src: image.imageUrl,
-            prompt: image.prompt,
-            width: image.width,
-            height: image.height,
-            generationStep: image.generationStep,
-            seed: image.seed,
-            guidanceScale: image.guidanceScale
-          })));
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-    };
-  
-    // Refresh the image source every five seconds
-    const intervalId = setInterval(updateImageSource, 500000);
-  
-    // Cleanup function to clear the interval when the component is unmounted
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []); // Empty dependency array ensures the effect runs only once after initial render
-  
 
   useEffect(() => {
     // Function to update the gallery
@@ -365,13 +309,6 @@ const HomePage = () => {
       }
     };
 
-    // Refresh the image source every five seconds
-    const intervalUser = setInterval(fetchImages, 500000);
-
-    // Cleanup function to clear the interval when the component is unmounted
-    return () => {
-      clearInterval(intervalUser);
-    };
   }, []); // Empty dependency array ensures the effect runs only once after initial render
 
   // Function to chunk an array into smaller arrays of a specified size
@@ -390,9 +327,6 @@ const HomePage = () => {
 
   return (
     <div className="body-container">
-      <div className="fullscreen-logo">
-        <img src="Drop.jpg" alt="Logo" />
-      </div>
       <div className="homepage-container">
         <div className="user-container">
           <NavLink to="/user" className="user-profile-link">
@@ -505,7 +439,7 @@ const HomePage = () => {
                 <div className="style-buttons"> {/* Add this wrapper */}
                   <div 
                     className={`style-button ${buttonStates.complex ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('complex', 'style')}
+                    onClick={() => handleButtonToggle('complex')}
                   >
                     <div className="button-image">
                       <img src="detailed.jpg" alt="Detailed" />
@@ -514,7 +448,7 @@ const HomePage = () => {
                   </div>            
                   <div 
                     className={`style-button ${buttonStates.colorful ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('colorful', 'style')}
+                    onClick={() => handleButtonToggle('colorful')}
                   >
                     <div className="button-image">
                       <img src="colorful.jpg" alt="Colorful" />
@@ -523,7 +457,7 @@ const HomePage = () => {
                   </div>
                   <div 
                     className={`style-button ${buttonStates.bw ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('bw', 'style')}
+                    onClick={() => handleButtonToggle('bw')}
                   >
                     <div className="button-image">
                       <img src="bw.jpg" alt="B&W" />
@@ -532,7 +466,7 @@ const HomePage = () => {
                   </div>
                   <div 
                     className={`style-button ${buttonStates.highcontrast ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('highcontrast', 'style')}
+                    onClick={() => handleButtonToggle('highcontrast')}
                   >
                     <div className="button-image">
                       <img src="highcontrast.jpg" alt="High Contrast" />
@@ -541,7 +475,7 @@ const HomePage = () => {
                   </div>
                   <div 
                     className={`style-button ${buttonStates.patchdesign ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('patchdesign', 'style')}
+                    onClick={() => handleButtonToggle('patchdesign')}
                   >
                     <div className="button-image">
                       <img src="realistic.jpg" alt="Realistic" />
@@ -556,7 +490,7 @@ const HomePage = () => {
                 <div className="style-buttons"> {/* wrapper */}
                   <div 
                     className={`style-button ${buttonStates.myasaki ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('myasaki', 'style')}
+                    onClick={() => handleButtonToggle('myasaki')}
                   >
                     <div className="button-image">
                       <img src="myasaki.jpg" alt="Myasaki" />
@@ -565,7 +499,7 @@ const HomePage = () => {
                   </div>
                   <div 
                     className={`style-button ${buttonStates.steampunk ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('steampunk', 'style')}
+                    onClick={() => handleButtonToggle('steampunk')}
                     >
                     <div className="button-image">
                       <img src="steampunk.jpg" alt="Steampunk" />
@@ -574,7 +508,7 @@ const HomePage = () => {
                   </div>
                   <div 
                     className={`style-button ${buttonStates.japanesestyle ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('japanesestyle', 'oriental style')}
+                    onClick={() => handleButtonToggle('japanesestyle')}
                     >
                     <div className="button-image">
                       <img src="japanesestyle.jpg" alt="Japanese Style" />
@@ -582,11 +516,11 @@ const HomePage = () => {
                     <h3>Japanese Style</h3>
                   </div>
                   <div 
-                    className={`style-button ${buttonStates.japanesestyle ? 'button-on' : 'button-off'}`}
-                    onClick={() => handleButtonToggle('japanesestyle', 'oriental style')}
+                    className={`style-button ${buttonStates.comics ? 'button-on' : 'button-off'}`}
+                    onClick={() => handleButtonToggle('comics')}
                     >
                     <div className="button-image">
-                      <img src="japanesestyle.jpg" alt="Japanese Style" />
+                      <img src="cartoon.jpg" alt="Cartoon" />
                     </div>
                     <h3>Comics</h3>
                   </div>
@@ -616,7 +550,7 @@ const HomePage = () => {
           <div className="format-buttons"> {/* Add this wrapper */}
             <div 
               className={`format-button ${buttonStates.closeup ? 'button-on' : 'button-off'}`}
-              onClick={() => handleButtonToggle('closeup', 'style')}
+              onClick={() => handleButtonToggle('closeup')}
               >
               <div className="button-image">
                 <img src="closeup.jpg" alt="Close Up" />
@@ -625,7 +559,7 @@ const HomePage = () => {
             </div>
             <div 
               className={`format-button ${buttonStates.longshot ? 'button-on' : 'button-off'}`}
-              onClick={() => handleButtonToggle('longshot', 'style')}
+              onClick={() => handleButtonToggle('longshot')}
               >
               <div className="button-image">
                 <img src="longshot.jpg" alt="Long Shot" />
@@ -634,7 +568,7 @@ const HomePage = () => {
             </div>
             <div 
               className={`format-button ${buttonStates.landscape ? 'button-on' : 'button-off'}`}
-              onClick={() => handleButtonToggle('landscape', 'style')}
+              onClick={() => handleButtonToggle('landscape')}
               >
               <div className="button-image">
                 <img src="landscape.jpg" alt="Landscape" />
@@ -643,7 +577,7 @@ const HomePage = () => {
             </div>
             <div 
               className={`format-button ${buttonStates.background ? 'button-on' : 'button-off'}`}
-              onClick={() => handleButtonToggle('background', 'style')}
+              onClick={() => handleButtonToggle('background')}
               >
               <div className="button-image">
                 <img src="background.jpg" alt="Background" />
@@ -652,7 +586,7 @@ const HomePage = () => {
             </div>
             <div 
               className={`format-button ${buttonStates.portrait ? 'button-on' : 'button-off'}`}
-              onClick={() => handleButtonToggle('portrait', 'style')}
+              onClick={() => handleButtonToggle('portrait')}
               >
               <div className="button-image">
                 <img src="portrait.jpg" alt="Portrait" />
