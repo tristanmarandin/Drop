@@ -81,7 +81,7 @@ const CommunityPage = () => {
     const fetchImages = async () => {
       try {
         // Fetch the images with community = true from the backend API
-        const response = await fetch('http://localhost:4000/api/images?community=true');
+        const response = await fetch('http://localhost:4000/api/getImagesCommunity');
         const data = await response.json();
 
         // Update the images state with the fetched images
