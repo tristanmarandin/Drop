@@ -45,7 +45,7 @@ const HomePage = () => {
   const possibleImageDimensions = [
     { value: '1152 x 768', width: '1024', height: '688'},
     { value: '1088 x 896', width: '1024', height: '848'},
-    { value: '1024 x 1024', width: '1024', height: '1024'},
+    { value: '1024 x 1024', width: '512', height: '512'},
     { value: '896 x 1088', width: '848', height: '1024'},
     { value: '768 x 1152', width: '688', height: '1024'}
   ];  
