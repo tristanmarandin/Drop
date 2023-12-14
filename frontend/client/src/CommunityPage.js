@@ -31,6 +31,7 @@ const CommunityPage = () => {
         },
         body: JSON.stringify({ research }),
       });
+      
 
       if (!response.ok) {
         throw new Error('Failed to get search results');

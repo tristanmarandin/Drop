@@ -276,13 +276,22 @@ const HomePage = () => {
           userID,
           instruction,
           selectedButtons,
-          imageWidth: Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).width),
-          imageHeight: Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).height),
+          imageWidth: 512,
+          imageHeight: 512,
           seed: seedValue,
           generationSteps: Number.isNaN(generationSteps) ? 20 : generationSteps,
           guidanceScale: Number.isNaN(guidanceScaleValue) ? 7.5 : guidanceScaleValue,
         }),
-      })
+      });
+      // Process the JSON response
+      if (response.ok) {
+        const jsonResponse = await response.json();
+        // Assuming jsonResponse is an array of objects and each object has a url_image field
+        const urls = jsonResponse.map(item => item.url_image);
+        console.log(urls); // Prints the array of URLs to the console
+      } else {
+        throw new Error('Network response was not ok.');
+      }
 
       console.log(response.json());
 
