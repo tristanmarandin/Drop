@@ -39,7 +39,7 @@ const CommunityPage = () => {
 
       // Parse the response data
       const searchData = await response.json();
-
+      const urls = searchData.map(item => item.url_image);
       // Update the state with the matching images
       setCommuneImages(searchData);
 
@@ -92,7 +92,7 @@ const CommunityPage = () => {
       }
     };
 
-    fetchImages();
+    //fetchImages();
   }, []);
   
 
