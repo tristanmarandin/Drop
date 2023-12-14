@@ -293,7 +293,6 @@ const HomePage = () => {
         throw new Error('Network response was not ok.');
       }
 
-
       // Clear the instruction input field
       instructionTextArea.value = '';
 

@@ -92,7 +92,7 @@ const CommunityPage = () => {
       }
     };
 
-    //fetchImages();
+    fetchImages();
   }, []);
   
 
