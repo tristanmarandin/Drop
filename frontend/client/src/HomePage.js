@@ -267,7 +267,7 @@ const HomePage = () => {
 
   const handleSendInstruction = async () => {
     try {
-      let userID = "admin";
+      let userID = "1";
       // Get the instruction from the user input field or textarea
       const instructionTextArea = document.getElementById('instructionInput');
       const instruction = instructionTextArea.value;
@@ -298,15 +298,15 @@ const HomePage = () => {
           userID,
           instruction,
           selectedButtons,
-          buttonLabelsByTab,
-          imageWidth: Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).width),
-          imageHeight: Number(possibleImageDimensions.find(dimensions => dimensions.value === imageDimensions).height),
+          imageWidth: 512,
+          imageHeight: 512,
           seed: seedValue,
           generationSteps: Number.isNaN(generationSteps) ? 20 : generationSteps,
           guidanceScale: Number.isNaN(guidanceScaleValue) ? 7.5 : guidanceScaleValue,
         }),
       })
 
+      console.log(response);
       // Clear the instruction input field
       instructionTextArea.value = '';
 
@@ -340,9 +340,6 @@ const HomePage = () => {
         });
     };
   
-    // Refresh the image source every five seconds
-    const intervalId = setInterval(updateImageSource, 500000);
-  
     // Cleanup function to clear the interval when the component is unmounted
     return () => {
       clearInterval(intervalId);
@@ -364,9 +361,6 @@ const HomePage = () => {
         console.error(error);
       }
     };
-
-    // Refresh the image source every five seconds
-    const intervalUser = setInterval(fetchImages, 500000);
 
     // Cleanup function to clear the interval when the component is unmounted
     return () => {
@@ -774,65 +768,6 @@ const HomePage = () => {
             <button onClick={() => { handleScrollToTop(); handleSendInstruction(); setIsInstructionButtonClicked(true); }} className="continue-button">
               Generate
             </button>
-          </div> 
-          
-          <div className="gallery">
-            {chunkedGalleryImages.map((imageChunk, chunkIndex) => (
-              <div key={chunkIndex}>
-                <div className="imageRow">
-                  {imageChunk.map((image) => (
-                    <div className="galleryImages" onClick={(event) => handleImageClick(event, image._id)} key={image._id}>
-                      <img
-                        key={image._id}
-                        src={image.imageUrl}
-                        alt={image.prompt}
-                        className={"galleryImage"}
-                        loading="lazy" // Enable lazy loading for the image
-                        onClick={(event) => handleImageClick(event, image._id)}
-                      />
-                      
-                      {clickedImageId === image._id && 
-                        <div className="modal" onClick={(event) => handleImageClick(event, image._id)}>
-                          <div className="modal-content" onClick={e => e.stopPropagation()}>
-                            <div className="modal-text">
-                              <div className="modal-prompt">
-                                <p>{image.prompt}</p>
-                              </div>
-                              <div className="modal-parameters">
-                                <p>Width<br/><span>{image.width}</span></p>
-                                <p>Height<br/><span>{image.height}</span></p>
-                                <p>Generation Step<br/><span>{image.generationStep}</span></p>
-                                <p>Seed<br/><span>{image.seed}</span></p>
-                                <p>Guidance Scale<br/><span>{image.guidanceScale}</span></p>
-                              </div>
-                              <button 
-                                onClick={() => handleSuggestToCommunity(image._id)} 
-                                className={`submit-button ${isSubmitButtonClicked ? 'clicked' : ''}`}
-                              >
-                                {isSubmitButtonClicked ? <FaLock /> : <FaLockOpen />}
-                                <span>Keep Private</span>
-                              </button>
-                            </div>
-                            <div className="modal-image">
-                              <img
-                                id={image._id}
-                                src={image.imageUrl}
-                                alt={image._id}
-                                className="galleryImage"
-                              />
-                              <button onClick={() => handleDownload(image.imageUrl)} className="download-button">
-                                <FaDownload />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      }
-                    </div>
-                  ))}
-                </div>
-                <div className="imagePrompt">{imageChunk[0].prompt}</div>
-              </div>
-            ))}
           </div>  
       </div>
     </div>
