@@ -24,13 +24,14 @@ const CommunityPage = () => {
       const research = researchTextArea.value;
 
       // Send the instruction to the backend
-      const response = await fetch('http://localhost:4000/api/research', {
+      const response = await fetch('http://localhost:3000/api/image/getImagesCommunity', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ research }),
       });
+      
 
       if (!response.ok) {
         throw new Error('Failed to get search results');
@@ -81,7 +82,7 @@ const CommunityPage = () => {
     const fetchImages = async () => {
       try {
         // Fetch the images with community = true from the backend API
-        const response = await fetch('http://localhost:4000/api/getImagesCommunity');
+        const response = await fetch('http://localhost:3000/api/image/getImagesCommunity');
         const data = await response.json();
 
         // Update the images state with the fetched images
