@@ -286,6 +286,7 @@ const HomePage = () => {
 
       console.log(response);
 
+      console.log(response);
       // Clear the instruction input field
       instructionTextArea.value = '';
 
@@ -710,65 +711,6 @@ const HomePage = () => {
             <button onClick={() => { handleScrollToTop(); handleSendInstruction(); setIsInstructionButtonClicked(true); }} className="continue-button">
               Generate
             </button>
-          </div> 
-          
-          <div className="gallery">
-            {chunkedGalleryImages.map((imageChunk, chunkIndex) => (
-              <div key={chunkIndex}>
-                <div className="imageRow">
-                  {imageChunk.map((image) => (
-                    <div className="galleryImages" onClick={(event) => handleImageClick(event, image._id)} key={image._id}>
-                      <img
-                        key={image._id}
-                        src={image.imageUrl}
-                        alt={image.prompt}
-                        className={"galleryImage"}
-                        loading="lazy" // Enable lazy loading for the image
-                        onClick={(event) => handleImageClick(event, image._id)}
-                      />
-                      
-                      {clickedImageId === image._id && 
-                        <div className="modal" onClick={(event) => handleImageClick(event, image._id)}>
-                          <div className="modal-content" onClick={e => e.stopPropagation()}>
-                            <div className="modal-text">
-                              <div className="modal-prompt">
-                                <p>{image.prompt}</p>
-                              </div>
-                              <div className="modal-parameters">
-                                <p>Width<br/><span>{image.width}</span></p>
-                                <p>Height<br/><span>{image.height}</span></p>
-                                <p>Generation Step<br/><span>{image.generationStep}</span></p>
-                                <p>Seed<br/><span>{image.seed}</span></p>
-                                <p>Guidance Scale<br/><span>{image.guidanceScale}</span></p>
-                              </div>
-                              <button 
-                                onClick={() => handleSuggestToCommunity(image._id)} 
-                                className={`submit-button ${isSubmitButtonClicked ? 'clicked' : ''}`}
-                              >
-                                {isSubmitButtonClicked ? <FaLock /> : <FaLockOpen />}
-                                <span>Keep Private</span>
-                              </button>
-                            </div>
-                            <div className="modal-image">
-                              <img
-                                id={image._id}
-                                src={image.imageUrl}
-                                alt={image._id}
-                                className="galleryImage"
-                              />
-                              <button onClick={() => handleDownload(image.imageUrl)} className="download-button">
-                                <FaDownload />
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      }
-                    </div>
-                  ))}
-                </div>
-                <div className="imagePrompt">{imageChunk[0].prompt}</div>
-              </div>
-            ))}
           </div>  
       </div>
     </div>
