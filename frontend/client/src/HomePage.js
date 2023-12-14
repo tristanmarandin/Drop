@@ -293,6 +293,8 @@ const HomePage = () => {
         throw new Error('Network response was not ok.');
       }
 
+      console.log(response.json());
+
       // Clear the instruction input field
       instructionTextArea.value = '';
 
@@ -306,7 +308,7 @@ const HomePage = () => {
     const fetchImages = async () => {
       try {
         // Fetch the images with user = true from the backend API
-        const response = await fetch('http://localhost:3000/api/user');
+        const response = await fetch('http://localhost:3000/api/image/user');
         const data = await response.json();
 
         // Update the images state with the fetched images
