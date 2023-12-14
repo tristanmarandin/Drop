@@ -284,9 +284,8 @@ const HomePage = () => {
         }),
       })
 
-      console.log(response);
-
-      console.log(response);
+      console.log(response.json());
+      
       // Clear the instruction input field
       instructionTextArea.value = '';
 
