@@ -10,10 +10,10 @@ import './HomePage.css';
 const HomePage = () => {
   const [instruction, setInstruction] = useState('');
   const [imageData, setImageData] = useState([
-    { id: 'image1', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
-    { id: 'image2', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
-    { id: 'image3', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
-    { id: 'image4', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+    { id: 'image1', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', imageId: '', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+    { id: 'image2', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', imageId: '', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+    { id: 'image3', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', imageId: '', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+    { id: 'image4', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', imageId: '', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
   ]);
   const [isInstructionTutorialDone, setIsInstructionTutorialDone] = useState(false);  
   const [isInstructionButtonClicked, setIsInstructionButtonClicked] = useState(false);
@@ -80,24 +80,22 @@ const HomePage = () => {
       setClickedImageId(null);
     } else {
       setClickedImageId(id);
-  
-      // Fetch the clicked image
-      const response = await fetch(`http://localhost:3000/api/images/${id}`);
-      if (response.ok) {
-        const { image } = await response.json();
-        // Update the isSubmitButtonClicked state based on the 'community' attribute of the clicked image
-        setIsSubmitButtonClicked(image.community);
-      } else {
-        console.error('Failed to fetch image');
-      }
     }
   };
 
   const handleSuggestToCommunity = async (imageId) => {
     try {
       setIsSubmitButtonClicked(prevState => !prevState);
-      const updateResponse = await fetch(`http://localhost:3000/api/images/${imageId}/community`, {
-        method: 'PUT',
+      const updateResponse = await fetch(`http://localhost:3000/api/image/setImage`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: imageId,
+          isVisible: isSubmitButtonClicked
+        }),
+
       });
   
       if (updateResponse.ok) {
@@ -244,64 +242,174 @@ const HomePage = () => {
     }
   };
 
+  // const handleSendInstruction = async () => {
+  //   try {
+  //     let userID = "1";
+  //     // Get the instruction from the user input field or textarea
+  //     const instructionTextArea = document.getElementById('instructionInput');
+  //     const instruction = instructionTextArea.value;
+
+  //     const buttonLabelsByTab = {
+  //       Style: getButtonLabelsByTab('Style'),
+  //       Format: getButtonLabelsByTab('Format'),
+  //       Model: getButtonLabelsByTab('Model'),
+  //     };
+  
+  //     // Get the titles of buttons in the ON state
+  //     const selectedButtons = Object.keys(buttonStates).filter(
+  //       buttonName => buttonStates[buttonName]
+  //     );
+  
+  //     // Get the parameter values from the state variables
+  //     const seedValue = seed.trim() || null; // Set seed as null if it's an empty string
+  //     const guidanceScaleValue = Number(guidanceScale);
+
+  //     // Send the instruction to the backend
+  //     const response = await fetch('http://localhost:3000/api/image/generate', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({
+  //         userID,
+  //         instruction,
+  //         selectedButtons,
+  //         imageWidth: 512,
+  //         imageHeight: 512,
+  //         seed: seedValue,
+  //         generationSteps: Number.isNaN(generationSteps) ? 20 : generationSteps,
+  //         guidanceScale: Number.isNaN(guidanceScaleValue) ? 7.5 : guidanceScaleValue,
+  //       }),
+  //     });
+  //     // Process the JSON response
+  //     if (response.ok) {
+  //       const jsonResponse = await response.json();
+  //       // Assuming jsonResponse is an array of objects and each object has a url_image field
+  //       let urls = jsonResponse.map(item => item.url_image);
+
+  //       // Your array of image objects
+  //     let images = [
+  //       { id: 'image1', src: 'https://pub-3626123a908346a7a8be8d9295f44e26.r2.dev/generations/0-2c0a2a27-e01b-45b2-a439-f38e19ce6829.png', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+  //       { id: 'image2', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+  //       { id: 'image3', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+  //       { id: 'image4', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+  //     ];
+  //     setImageData(images);
+  //     updateImageSource(urls);
+
+  //     } else {
+  //       throw new Error('Network response was not ok.');
+  //     }
+
+  //     // Clear the instruction input field
+  //     instructionTextArea.value = '';
+
+  //     // Clear the instruction input field
+  //     instructionTextArea.value = '';
+
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+  
+  // const updateImageSource = async (urls) => {
+  //   try {
+      
+  //     console.log(urls);
+  //     // Iterate over each URL and fetch/process new image data
+  //     const updatedImages = await Promise.all(urls.map(async (url, index) => {
+  //       const newImageData = await fetch(url); // This function fetches new data for the given URL
+  //       while (!newImageData.ok) {
+  //         await new Promise(resolve => setTimeout(resolve, 1000));
+  //         console.log(newImageData);
+  //         newImageData = await fetch(url);
+  //       }
+  //       return {
+  //         ...imageData[index], // Spread the existing properties of the image object
+  //         src: newImageData // Update the src with the new image data
+  //       };
+  //     }));
+      
+  //     // Update the imageData state with the updated images
+  //     setImageData(updatedImages);
+  //   } catch (error) {
+  //     console.error('Error updating images:', error);
+  //   }
+  // };
+
   const handleSendInstruction = async () => {
     try {
-      let userID = "1";
-      // Get the instruction from the user input field or textarea
-      const instructionTextArea = document.getElementById('instructionInput');
-      const instruction = instructionTextArea.value;
-
-      const buttonLabelsByTab = {
-        Style: getButtonLabelsByTab('Style'),
-        Format: getButtonLabelsByTab('Format'),
-        Model: getButtonLabelsByTab('Model'),
-      };
-  
-      // Get the titles of buttons in the ON state
-      const selectedButtons = Object.keys(buttonStates).filter(
-        buttonName => buttonStates[buttonName]
-      );
-  
-      // Get the parameter values from the state variables
-      const seedValue = seed.trim() || null; // Set seed as null if it's an empty string
+      const instruction = document.getElementById('instructionInput').value;
+      const selectedButtons = Object.keys(buttonStates).filter(buttonName => buttonStates[buttonName]);
+      const seedValue = seed.trim() || null;
       const guidanceScaleValue = Number(guidanceScale);
+      const width = imageDimensions.split(' x ')[0];
+      const height = imageDimensions.split(' x ')[1];
 
-      // Send the instruction to the backend
+      console.log(imageDimensions.split(" x ")[0]);
+
       const response = await fetch('http://localhost:3000/api/image/generate', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          userID,
-          instruction,
+          userID: "1",
+          instruction: instruction,
           selectedButtons,
-          imageWidth: 512,
-          imageHeight: 512,
+          imageWidth: Number(width),
+          imageHeight: Number(height),
           seed: seedValue,
           generationSteps: Number.isNaN(generationSteps) ? 20 : generationSteps,
           guidanceScale: Number.isNaN(guidanceScaleValue) ? 7.5 : guidanceScaleValue,
         }),
       });
-      // Process the JSON response
+
       if (response.ok) {
         const jsonResponse = await response.json();
-        // Assuming jsonResponse is an array of objects and each object has a url_image field
-        const urls = jsonResponse.map(item => item.url_image);
-        console.log(urls); // Prints the array of URLs to the console
+        updateImageSource(jsonResponse);
       } else {
         throw new Error('Network response was not ok.');
       }
 
-      console.log(response.json());
-
-      // Clear the instruction input field
-      instructionTextArea.value = '';
-
+      document.getElementById('instructionInput').value = '';
     } catch (error) {
       console.error(error);
     }
-  }
+};
+
+const updateImageSource = async (jsonResponse) => {
+  const urls = jsonResponse.map(item => item.url_image);
+    try {
+      const fetchImage = async (url) => {
+        let response;
+        do {
+          response = await fetch(url);
+          if (!response.ok) await new Promise(resolve => setTimeout(resolve, 5000));
+        } while (!response.ok);
+        return URL.createObjectURL(await response.blob());
+      };
+
+      console.log(jsonResponse);
+
+      const updatedImages = await Promise.all(urls.map(async (url, index) => ({
+        ...imageData[index],
+        src: await fetchImage(url),
+        imageId: jsonResponse[index].id,
+        prompt: instruction,
+        width: jsonResponse[index].width,
+        height: jsonResponse[index].height,
+        generationStep: jsonResponse[index].generationSteps,
+        seed: jsonResponse[index].seedValue,
+        guidanceScale: jsonResponse[index].guidanceScale
+      })));
+
+      setImageData(updatedImages);
+    } catch (error) {
+      console.error('Error updating images:', error);
+    }
+};
+
+
+  
 
   useEffect(() => {
     // Function to update the gallery
@@ -383,16 +491,17 @@ const HomePage = () => {
   
         {isInstructionButtonClicked && 
           <div className="generatedImage-wrapper">
-            {imageData.map(({ id, src, prompt, width, height, generationStep, seed, guidanceScale }) => (
-              <div className="generatedImage" onClick={(event) => handleImageClick(event, id)} key={id}>
+            {imageData.map(({ id, src, imageId, prompt, width, height, generationStep, seed, guidanceScale }) => (
+              <div className="generatedImage" onClick={(event) => handleImageClick(event, imageId)} key={id}>
                 <img
                   id={id}
                   src={src}
                   alt={id}
+                  data-id={imageId}
                   className="imageStyle"
                 />
-                {clickedImageId === id && 
-                  <div className="modal" onClick={(event) => handleImageClick(event, id)}>
+                {clickedImageId === imageId && 
+                  <div className="modal" onClick={(event) => handleImageClick(event, imageId)}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
                       <div className="modal-text">
                         <div className="modal-prompt">
@@ -406,7 +515,7 @@ const HomePage = () => {
                           <p>Guidance Scale<br/><span>{guidanceScale}</span></p>
                         </div>
                         <button 
-                          onClick={() => handleSuggestToCommunity(id)} 
+                          onClick={() => handleSuggestToCommunity(imageId)} 
                           className={`submit-button ${isSubmitButtonClicked ? 'clicked' : ''}`}
                         >
                           {isSubmitButtonClicked ? <FaLock /> : <FaLockOpen />}
