@@ -289,11 +289,31 @@ const HomePage = () => {
         // Assuming jsonResponse is an array of objects and each object has a url_image field
         const urls = jsonResponse.map(item => item.url_image);
         console.log(urls); // Prints the array of URLs to the console
+
+        // Your array of image objects
+      let images = [
+        { id: 'image1', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+        { id: 'image2', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+        { id: 'image3', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+        { id: 'image4', src: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/41/Siberischer_tiger_de_edit02.jpg/640px-Siberischer_tiger_de_edit02.jpg', prompt: '', width: '', height: '', generationStep: '', seed: '', guidanceScale: '' },
+      ];
+
+      // Replace the src of each image with the new URL
+      images = images.map((image, index) => {
+        if (urls[index]) { // Check if there is a corresponding URL
+          return {
+            ...image, // Spread the existing properties
+            src: urls[index] // Replace the src with the new URL
+          };
+        }
+        return image; // If no URL is present, return the image object unchanged
+      });
+      setImageData(images);
+      console.log(images);
+
       } else {
         throw new Error('Network response was not ok.');
       }
-
-      console.log(response.json());
 
       // Clear the instruction input field
       instructionTextArea.value = '';

@@ -31,7 +31,6 @@ const CommunityPage = () => {
         },
         body: JSON.stringify({ research }),
       });
-      
 
       if (!response.ok) {
         throw new Error('Failed to get search results');
@@ -87,12 +86,13 @@ const CommunityPage = () => {
 
         // Update the images state with the fetched images
         setCommuneImages(data.images);
+        console.log(data.images);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchImages();
+    //fetchImages();
   }, []);
   
 
