@@ -38,7 +38,7 @@ const CommunityPage = () => {
 
       // Parse the response data
       const searchData = await response.json();
-
+      const urls = searchData.map(item => item.url_image);
       // Update the state with the matching images
       setCommuneImages(searchData);
 
@@ -144,7 +144,7 @@ const CommunityPage = () => {
               <div className="communityGalleryImages" onClick={(event) => handleImageClick(event, image._id)} key={image._id}>
                 <img
                   key={image._id}
-                  src={image.imageUrl}
+                  src={image.url_image}
                   alt={image.prompt}
                   className={"communityGalleryImage"}
                   loading="lazy" // Enable lazy loading for the image
@@ -169,11 +169,11 @@ const CommunityPage = () => {
                       <div className="modal-image">
                         <img
                           id={image._id}
-                          src={image.imageUrl}
+                          src={image.url_image}
                           alt={image._id}
                           className="communityGalleryImage"
                         />
-                        <button onClick={() => handleDownload(image.imageUrl)} className="download-button">
+                        <button onClick={() => handleDownload(image.url_image)} className="download-button">
                           <FaDownload />
                         </button>
                       </div>
